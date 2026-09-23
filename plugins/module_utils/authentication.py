@@ -118,8 +118,8 @@ class AppRoleAuthenticator(Authenticator):
 
         Args:
             session (requests.Session): Session from the VaultClient. Using it means the login
-                request honours the TLS settings (``ca_cert``, ``tls_skip_verify``) as well as the
-                proxy and retry configuration that were applied to the client.
+                request picks up the TLS settings (``ca_cert``, ``tls_skip_verify``) and the proxy
+                configuration that were applied to the client
             vault_address (str): Vault server address
             role_id (str): AppRole role ID
             secret_id (str): AppRole secret ID
