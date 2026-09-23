@@ -85,6 +85,7 @@ class AppRoleAuthenticator(Authenticator):
         The login request is sent on the client session, so the TLS and proxy settings configured
         on the client apply to it as well as to subsequent API calls. Retries do not apply by
         default: urllib3 excludes POST from its default set of retryable methods.
+
         Args:
             client: VaultClient instance to authenticate
             vault_address (str): Vault server address (e.g., "https://vault.example.com:8200")
