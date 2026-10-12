@@ -9,7 +9,7 @@ __metaclass__ = type
 
 import json  # noqa: F401
 import logging
-from typing import Dict, Optional, Union
+from typing import Dict, Optional
 
 try:
     import requests
@@ -115,9 +115,9 @@ class VaultClient:
         vault_namespace: str,
         ca_certificate: Optional[str] = None,
         tls_skip_verify: bool = None,
-        proxies: Optional[Union[str, Dict[str, str]]] = None,
+        proxies: str | Dict[str, str] | None = None,
         timeout: Optional[int] = None,
-        retries: Optional[Union[int, str, Dict]] = None,
+        retries: int | str | Dict | None = None,
     ) -> None:
         """
         Initialize the Vault client.
@@ -182,7 +182,7 @@ class VaultClient:
         logger.debug("Token set for VaultClient")
 
     @staticmethod
-    def read_proxies(proxies: Union[str, dict]) -> Dict[str, str]:
+    def read_proxies(proxies: str | dict) -> Dict[str, str]:
         """
         Parses and validates proxy configurations from multiple input formats.
 
@@ -193,7 +193,7 @@ class VaultClient:
         3. A plain string: Treated as a single URL to be used for both 'http' and 'https'.
 
         Args:
-            proxies (Union[str, dict]): The proxy configuration.
+            proxies (str | dict): The proxy configuration.
                 Can be a dictionary, a JSON-encoded string, or a single URL string.
 
         Returns:
