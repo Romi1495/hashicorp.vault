@@ -421,7 +421,9 @@ class TestResolveTlsVerify:
 
     def test_ca_certificate_only(self):
         """A custom CA certificate path is returned as the verify value."""
-        assert resolve_tls_verify(ca_certificate="/etc/pki/tls/certs/custom-ca.pem") == "/etc/pki/tls/certs/custom-ca.pem"
+        assert (
+            resolve_tls_verify(ca_certificate="/etc/pki/tls/certs/custom-ca.pem") == "/etc/pki/tls/certs/custom-ca.pem"
+        )
 
     def test_tls_skip_verify_true(self):
         """tls_skip_verify=True disables verification regardless of ca_certificate."""
