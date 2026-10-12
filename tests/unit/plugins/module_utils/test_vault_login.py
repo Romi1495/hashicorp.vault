@@ -189,7 +189,7 @@ class TestVaultLogin:
 
         with patch.object(login._session, "post", return_value=response) as session_post:
             with patch("requests.post") as module_post:
-                client_token, _ = login.login(role_id="role-123", secret_id="secret-456")
+                client_token, auth_data = login.login(role_id="role-123", secret_id="secret-456")
 
         session_post.assert_called_once()
         module_post.assert_not_called()
