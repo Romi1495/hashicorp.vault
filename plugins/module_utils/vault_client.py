@@ -46,7 +46,28 @@ __all__ = [
     'VaultAclPolicies',
     'VaultNamespaces',
     'Secrets',
+    'resolve_tls_verify',
 ]
+
+
+def resolve_tls_verify(ca_certificate: Optional[str] = None, tls_skip_verify: Optional[bool] = None):
+    """
+    Resolve the ``requests`` ``verify`` value for the given TLS settings.
+
+    Args:
+        ca_certificate (str, optional): Path to a custom CA certificate file.
+        tls_skip_verify (bool, optional): When true, TLS verification is disabled.
+
+    Returns:
+        The value to assign to ``requests.Session.verify``, or None if neither
+        setting is provided and the default (certifi bundle) should be kept.
+    """
+    tls_skip_verify_b = boolean(tls_skip_verify) if tls_skip_verify is not None else False
+    if tls_skip_verify_b:
+        return False
+    if ca_certificate:
+        return ca_certificate
+    return None
 
 
 class VaultClient:
@@ -143,9 +164,9 @@ class VaultClient:
         self.acl_policies = VaultAclPolicies(self)
         self.namespaces = VaultNamespaces(self)
 
-        tls_skip_verify_b = boolean(tls_skip_verify) if tls_skip_verify is not None else False
-        if ca_certificate or tls_skip_verify_b:
-            self.session.verify = not tls_skip_verify_b if tls_skip_verify_b else ca_certificate
+        verify = resolve_tls_verify(ca_certificate, tls_skip_verify)
+        if verify is not None:
+            self.session.verify = verify
         # add proxy configuration
         if proxies:
             self.session.proxies.update(self.read_proxies(proxies))
