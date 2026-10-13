@@ -50,24 +50,22 @@ __all__ = [
 ]
 
 
-def resolve_tls_verify(ca_certificate: Optional[str] = None, tls_skip_verify: Optional[bool] = None):
+def resolve_tls_verify(ca_certificate: Optional[str] = None, tls_skip_verify: Optional[Union[bool, str]] = None):
     """
     Resolve the ``requests`` ``verify`` value for the given TLS settings.
 
     Args:
         ca_certificate (str, optional): Path to a custom CA certificate file.
-        tls_skip_verify (bool, optional): When true, TLS verification is disabled.
+        tls_skip_verify (bool or str, optional): When true, TLS verification is disabled.
+            Accepts the same string values as ``boolean()`` (e.g. "yes", "no").
 
     Returns:
         The value to assign to ``requests.Session.verify``, or None if neither
         setting is provided and the default (certifi bundle) should be kept.
     """
-    tls_skip_verify_b = boolean(tls_skip_verify) if tls_skip_verify is not None else False
-    if tls_skip_verify_b:
+    if tls_skip_verify is not None and boolean(tls_skip_verify):
         return False
-    if ca_certificate:
-        return ca_certificate
-    return None
+    return ca_certificate or None
 
 
 class VaultClient:

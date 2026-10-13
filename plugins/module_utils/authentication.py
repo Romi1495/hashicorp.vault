@@ -305,6 +305,8 @@ class VaultLogin:
             )
         except (KeyError, ValueError) as e:
             raise VaultLoginError(f"Invalid response format from Vault: {e}")
+        finally:
+            self._session.close()
 
 
 class VaultTokens:
